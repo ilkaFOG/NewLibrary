@@ -5,7 +5,7 @@ class Book:
         self.author = author
 
     def __str__(self):
-        return f'{self.title}, {self.year}, {self.author}'
+        return f'{self.title}, {self.author}, {self.year}'
 
     def __repr__(self):
-        return f'{self.title}, {self.year}, {self.author}'
+        return f'{self.title}, {self.author}, {self.year}'

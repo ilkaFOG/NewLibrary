@@ -34,8 +34,10 @@ class Library:
             )
         return book_list
 
+
     def remove_at(self, index: int):
         self.__library_model.get_by_id(index).delete_instance()
+
 
     def get_at(self, index: int):
         return self.__get_book(self.__library_model.get_by_id(index))
@@ -52,10 +54,6 @@ class Library:
     def connect(self):
         self.__data_base.connect()
 
-    # Для случаев когда новая (пустая) база данных
-    # https://docs.peewee-orm.com/en/latest/peewee/api.html#Database.create_tables
-    def init_tables(self):
-        self.__data_base.create_tables([self.__library_model])
 
     def close(self):
         self.__data_base.close()
@@ -70,6 +68,7 @@ class Library:
     def find_by_author(self, author):
         query = self.__library_model.select().where(LibraryModel.author == author)
         return self.__get_books(query)
+        
 
     def find_by_year(self, year):
         query = self.__library_model.select().where(LibraryModel.year == year)

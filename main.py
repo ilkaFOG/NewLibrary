@@ -2,6 +2,9 @@ from peewee import MySQLDatabase, InternalError as PeeweeInternalError
 from domain_models.book import Book
 from apis.my_sql import LibraryModel
 from repository.library import Library
+from borb.pdf import *
+from fpdf import FPDF
+
 
 
 def add_book(lib):
@@ -55,44 +58,68 @@ def count_books(lib):
 
 
 def find_books_year(lib):
-    year = input("Введите год для поиска: ")
-    book = lib.find_by_year(year)
-    print("Найдено: ", book)
-    return book
+    while True:
+        year = input("Введите год для поиска или \"отмена-1\" : ")
+        if year == "1":
+            return None
+        book = lib.find_by_year(year)
+        if book != []:
+            print("Найдено: ", book)
+            return book
+        else:
+            print("Ничего не надено")
 
 
 def find_books_author(lib):
-    author = input("Введите автора для поиска: ")
+    author = input("Введите автора для поиска или \"отмена-1\" : ")
+    if author == "1":
+        return None
     book = lib.find_by_author(author)
-    print("Найдено: ", book)
-    return book
+    if book != []:
+        print("Найдено: ", book)
+        return book
+    else:
+        print("Ничего не надено")
 
 
 def find_books_title(lib):
-    title = input("Введите название книги для поиска:")
+    title = input("Введите название книги для поиска: ")
+    if title == "1":
+        return None
     book = lib.find_by_title(title)
-    print("Найдено: ", book)
-    return book
+    if book != []:
+        print("Найдено: ", book)
+        return book
+    else:
+        print("Ничего не надено")
 
 
 def find_books(lib):
-    search = input("Искать книги по году, автору или названию?(Укажите Год, Автор, Название)")
-    if search == "Год":
+    search = input("Искать книги по году, автору или названию?\n(Укажите Год-1, Автор-2, Название-3): ")
+    if search == "1":
         return find_books_year(lib)
-    elif search == "Автор":
+    elif search == "2":
         return find_books_author(lib)
-    elif search == "Название":
-        return find_books_author(lib)
+    elif search == "3":
+        return find_books_title(lib)
 
     return None
 
 
 def print_all_books(lib):
-    print('Вывести весь список книг')
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
+    pdf.set_font('DejaVu', '', 14)
+
     t=lib.get_all_books()
     for x in t:
         for y in x:
-            print(y)
+            r=str(y)
+            pdf.cell(20, 10, r, ln=1)
+
+    pdf.output("vivod.pdf")
+    pdf.close
 
 
 if __name__ == '__main__':
@@ -101,7 +128,7 @@ if __name__ == '__main__':
 
         library.connect()
         while True:
-            print('Введите:''\n'' Добавить-1;\n Удалить-2;\n Изменить-3;\n Найти-4;\n Счетчик книг-5;\n Вывести все книги-6;\n или Выход-7: ')
+            print('\nВведите:''\n'' Добавить-1;\n Удалить-2;\n Изменить-3;\n Найти-4;\n Счетчик книг-5;\n Вывести все книги-6;\n Выход-7: ')
             command = input()
             if command == "7":
                 break
