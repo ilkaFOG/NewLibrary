@@ -66,12 +66,12 @@ class Library:
         )
 
     def find_by_author(self, author):
-        query = self.__library_model.select().where(LibraryModel.author == author)
+        query = self.__library_model.select().where(LibraryModel.author.contains(author))
         return self.__get_books(query)
         
 
     def find_by_year(self, year):
-        query = self.__library_model.select().where(LibraryModel.year == year)
+        query = self.__library_model.select().where(LibraryModel.year.contains(year))
         return self.__get_books(query)
 
 

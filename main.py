@@ -1,9 +1,12 @@
+import os
+
+
 from peewee import MySQLDatabase, InternalError as PeeweeInternalError
 from domain_models.book import Book
 from apis.my_sql import LibraryModel
 from repository.library import Library
-from borb.pdf import *
 from fpdf import FPDF
+from os import path
 
 
 
@@ -12,10 +15,14 @@ def add_book(lib):
     author = input("Введите автора книги: ")
     year = input("Введите год издания книги: ")
     lib.add(book=Book(title, year, author))
+    print("Добавлена книга: ", Book(title, year, author))
 
 
 def delete_book(lib):
     book_number = input("Введите ID книги которую необходимо удалить: ")
+    if book_number == "отмена":
+        print("Книги не удалены")
+        return
     book = lib.get_at(book_number)
     if not book:
         print("Книга не найдена")
@@ -32,16 +39,16 @@ def update_book(lib):
         print("Книга не найдена")
         return
     print("Изменение книги ", book)
-    title = input("Введите название книги (пусто, чтобы оставить без изменений): ")
+    title = input("Введите название книги \n(пусто, чтобы оставить без изменений): ")
     changed = False
     if title != "":
         book.title = title
         changed = True
-    year = input("Введите год издания книги (пусто, чтобы оставить без изменений): ")
+    year = input("Введите год издания книги \n(пусто, чтобы оставить без изменений): ")
     if year != "":
         book.year = year
         changed = True
-    author = input("Введите автора книги (пусто, чтобы оставить без изменений): ")
+    author = input("Введите автора книги \n(пусто, чтобы оставить без изменений): ")
     if author != "":
         book.author = author
         changed = True
@@ -112,14 +119,30 @@ def print_all_books(lib):
     pdf.add_font('DejaVu', '', 'DejaVuSansCondensed.ttf', uni=True)
     pdf.set_font('DejaVu', '', 14)
 
-    t=lib.get_all_books()
-    for x in t:
-        for y in x:
-            r=str(y)
-            pdf.cell(20, 10, r, ln=1)
+    p=lib.get_all_books()
+    for x in p:
+        t = str(x)
+        t=t.replace('(', '')
+        t=t.replace(')', '')
+        pdf.cell(20, 10, t, ln=1)
+        print(t)
 
-    pdf.output("vivod.pdf")
-    pdf.close
+    # path = r'E:\7 семестр\Информационное обеспечение систем управления\sqlLibraryPython'
+    # files = os.listdir(path)
+    # files = [os.path.join(path, file) for file in files]
+    # files = [file for file in files if os.path.isfile(file)]
+    # print(max(files, key=os.path.getctime))
+        
+    name = os.path.basename(r'E:\7 семестр\Информационное обеспечение систем управления\sqlLibraryPython\vivod2.pdf')
+    name = name[5:-4]
+    name = int(name)
+    name=name+1
+    name=str(name)
+    name= "vivod" + name + ".pdf"
+
+    F='E:\7 семестр\Информационное обеспечение систем управления\sqlLibraryPython'
+    pdf.output(name, F)
+
 
 
 if __name__ == '__main__':
@@ -128,7 +151,8 @@ if __name__ == '__main__':
 
         library.connect()
         while True:
-            print('\nВведите:''\n'' Добавить-1;\n Удалить-2;\n Изменить-3;\n Найти-4;\n Счетчик книг-5;\n Вывести все книги-6;\n Выход-7: ')
+            # os.system('cls')
+            print('Введите❤️:''\n'' Добавить-1;\n Удалить-2;\n Изменить-3;\n Найти-4;\n Счетчик книг-5;\n Вывести все книги-6;\n Выход-7: ')
             command = input()
             if command == "7":
                 break
