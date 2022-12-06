@@ -1,3 +1,4 @@
+from ast import Index
 import datetime
 import os
 import msvcrt
@@ -105,7 +106,6 @@ class Ui:
             return
         book.title = title
         self.library.update_at(book_number, book)
-        # input("Press enter to go to main menu")
 
     def change_author(self, book_number, book):
         os.system("cls")
@@ -129,11 +129,11 @@ class Ui:
 
     def update_book(self):
         os.system("cls")
-        while True:            
-            print ("Нажмите <Esc> для выхода в главное меню или <Enter> для продолжения изменения книги")
-            key = ord(msvcrt.getch())
-            if key == 27:
-                break
+        print ("Нажмите <Esc> для выхода в главное меню или <Enter> для продолжения изменения книги")
+        key = ord(msvcrt.getch())
+        if key == 27:
+           return
+        while True:           
             os.system('cls')
             book_id = int(input("Введите номер книги которую необходимо обновить:"))
             while book_id <=0:
@@ -150,7 +150,7 @@ class Ui:
             print("Изменение книги: ", book,"\nЧто необходимо изменить? \n1-Название \n2-Автор \n3-Год \n<Esc> для выхода")
             change_option = ord(msvcrt.getch())
             if key == 27:
-                break
+                return
             if change_option == 49:
                 self.change_title(book_id, book)
             elif change_option == 50:
@@ -163,7 +163,7 @@ class Ui:
                 change_option = ord(msvcrt.getch())
 
                 if change_option == 49:
-                    self.library.update_at(book=book)
+                    self.library.update_at(book_id, book=book)
                     print("Изменена книга ", book)
                 print ("Нажмите <Esc> для выхода")
                 key = ord(msvcrt.getch())
@@ -175,6 +175,7 @@ class Ui:
         while True:
             print ("Нажмите <Esc> для выхода в главное меню или <Enter> для продолжения")
             key = ord(msvcrt.getch())
+            s = key
             if key == 27:
                 break
             os.system('cls')
@@ -197,7 +198,7 @@ class Ui:
                     elif key == 27:
                         return
             year = int(input("Введите год издания книги:"))
-            while year <= 0 or year > int(datetime.date.today().year):
+            while year < 0 or year > int(datetime.date.today().year):
                 year = int(input("Попробуйте ввести год еще раз: "))
             book = Book(title, year, author)
             print("Хотите добавить книгу\n %s? \n 1-Да, 2-Нет" % book)
