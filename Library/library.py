@@ -1,4 +1,4 @@
-from peewee import MySQLDatabase
+from peewee import MySQLDatabase, DoesNotExist
 
 from SQL.my_sql import LibraryModel
 from Book.book import Book
@@ -40,7 +40,10 @@ class Library:
 
 
     def get_at(self, index: int):
-        return self.__get_book(self.__library_model.get_by_id(index))
+        try:
+            return self.__get_book(self.__library_model.get_by_id(index))
+        except DoesNotExist:
+            return None
 
 
     def update_at(self, index, book: Book):

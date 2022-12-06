@@ -20,29 +20,30 @@ class Ui:
 
     def print_all(self):
         os.system('cls')
-        while True:
-            print ("Нажмите <Esc> для выхода в главное меню или <Enter> для вывода всех книг")
-            key = ord(msvcrt.getch())
-            if key == 27:
-                break
+        print ("Нажмите <Esc> для выхода в главное меню или <Enter> для вывода всех книг")
+        key = ord(msvcrt.getch())
+        if key == 27:
+            return
+        while True:           
+            os.system('cls')
             pdf = PdfFile()
             books = self.library.get_all_books()
             pdf.save(books)
-            print ("Нажмите <Esc> для выхода")
+            print ("Нажмите <Esc> для выхода или <Enter> для повторного вывода")
             key = ord(msvcrt.getch())
             if key == 27:
-                break
+                return
 
     def find_books_year(self):
         while True:
             os.system("cls")
-            year = input("Введите автора книги:")
+            year = input("Введите год книги:")
             book = self.library.find_by_year(year)
             if not book:
                 print('Книга с данным годом не найдена.\nХотите попробовать другой год - 1 \nили выйти - <Esc>')
                 key = ord(msvcrt.getch())
                 if key == 27:
-                    break
+                    return
                 else:
                     self.find_books_year()
             print("Найдено: ", book)
@@ -57,7 +58,7 @@ class Ui:
                 print('Книга с данным автором не найдена.\nХотите попробовать другого автора - 1 \nили выйти - <Esc>')
                 key = ord(msvcrt.getch())
                 if key == 27:
-                    break
+                    return
                 else:
                     self.find_books_author()
             print("Найдено: ", book)
@@ -72,7 +73,7 @@ class Ui:
                 print('Книга с данным названием не найдена.\nХотите попробовать другое название - 1 \nили выйти - <Esc>')
                 key = ord(msvcrt.getch())
                 if key == 27:
-                    break
+                    return
                 else:
                     self.find_books_title()
             print("Найдено: ", book)
@@ -85,7 +86,7 @@ class Ui:
             print("Произвести поиск по \nНазванию - 1 \nАтвору - 2 \nГоду - 3 \nИли <Esc> для выхода \nВведите соотвествующее число: ")
             search = ord(msvcrt.getch())
             if search == 27:
-                break
+                return
             elif search == 51:
                 self.find_books_year()
             elif search == 50:
@@ -96,7 +97,7 @@ class Ui:
             key = ord(msvcrt.getch())
             if key == 27:
                 # return result
-                break
+                return
 
     def change_title(self, book_number, book):
         os.system("cls")
@@ -141,15 +142,17 @@ class Ui:
                 book_id = int(input('Введите номер книги еще раз: '))
             book = self.library.get_at(book_id)
 
-            while not book:
-                print("Книга не найдена. Нажмите <Esc> для выхода")
+            while not Book:
+                print("Книга не найдена. Нажмите <Esc> для выхода\n Или <Enter> если хотите попробовать еще раз")
                 key = ord(msvcrt.getch())
                 if key == 27:
                     return
+                if key == 13:
+                    break
 
             print("Изменение книги: ", book,"\nЧто необходимо изменить? \n1-Название \n2-Автор \n3-Год \n<Esc> для выхода")
             change_option = ord(msvcrt.getch())
-            if key == 27:
+            if change_option == 27:
                 return
             if change_option == 49:
                 self.change_title(book_id, book)
@@ -165,10 +168,11 @@ class Ui:
                 if change_option == 49:
                     self.library.update_at(book_id, book=book)
                     print("Изменена книга ", book)
-                print ("Нажмите <Esc> для выхода")
-                key = ord(msvcrt.getch())
-                if key == 27:
-                    break
+                else:
+                    print ("Нажмите <Esc> для выхода")
+                    key = ord(msvcrt.getch())
+                    if key == 27:
+                        return
 
     def add_book(self):
         os.system("cls")
@@ -217,23 +221,26 @@ class Ui:
 
     def delete_book(self):
         os.system("cls")
+        print ("Нажмите <Esc> для выхода в главное меню или <Enter> для продолжения")
+        key = ord(msvcrt.getch())
+        if key == 27:
+            return
         while True:
-            print ("Нажмите <Esc> для выхода в главное меню или <Enter> для продолжения")
-            key = ord(msvcrt.getch())
-            if key == 27:
-                break
-
             os.system("cls")
             book_number = input("Введите номер книги для удаления:")
             book = self.library.get_at(book_number)
             if not book:
-                input("Книга не найдена")
-                return
-            print("Действително удалить книгу %s? \n1-yes \n2-no" % book)
+                print("Книга не найдена\n Повторить поиск - 1 \n Выйти - <Esc>")
+                key = ord(msvcrt.getch())
+                if key == 27:
+                    return
+                else:
+                    self.delete_book()
+            print("Действително удалить книгу %s? \n1-Да \n2-Нет" % book)
             change_option = ord(msvcrt.getch())
             if change_option == 49:
                 self.library.remove_at(book_number)
-                print("Удалена книга ", book)
+                print("Книга %s была удалена" % book)
             print ("Нажмите <Esc> для выхода")
             key = ord(msvcrt.getch())
             if key == 27:
@@ -245,7 +252,9 @@ class Ui:
         books = self.library.get_all_books()
         books = len(books)
         book = str(books)
-        if book[-1] == '1':
+        if books > 10 and book == '11' or book == '12' or book == '13' or book == '14':
+            n = 'книг'
+        elif book[-1] == '1':
             n = 'книга'
         elif book[-1] == '2' or book[-1] == '3' or book[-1] == '4':
             n = 'книги'
