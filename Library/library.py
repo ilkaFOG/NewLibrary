@@ -1,7 +1,7 @@
 from peewee import MySQLDatabase
 
-from apis.my_sql import LibraryModel
-from domain_models.book import Book
+from SQL.my_sql import LibraryModel
+from Book.book import Book
 
 
 class Library:
@@ -54,7 +54,6 @@ class Library:
     def connect(self):
         self.__data_base.connect()
 
-
     def close(self):
         self.__data_base.close()
 
@@ -65,19 +64,16 @@ class Library:
             title=book.title
         )
 
+    def find_by_title(self, title):
+        query = self.__library_model.select().where(LibraryModel.title.contains(title))
+        return self.__get_books(query)
+
     def find_by_author(self, author):
         query = self.__library_model.select().where(LibraryModel.author.contains(author))
         return self.__get_books(query)
         
-
     def find_by_year(self, year):
         query = self.__library_model.select().where(LibraryModel.year.contains(year))
-        return self.__get_books(query)
-
-
-    # https://docs.peewee-orm.com/en/latest/peewee/query_operators.html
-    def find_by_title(self, title):
-        query = self.__library_model.select().where(LibraryModel.title.contains(title))
         return self.__get_books(query)
 
     def count(self):
