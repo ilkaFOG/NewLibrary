@@ -140,8 +140,8 @@ def print_all_books(lib):
     name=str(name)
     name= "vivod" + name + ".pdf"
 
-    F='E:\7 семестр\Информационное обеспечение систем управления\sqlLibraryPython'
-    pdf.output(name, F)
+    # F='E:\7 семестр\Информационное обеспечение систем управления\sqlLibraryPython'
+    pdf.output(name)
 
 
 
