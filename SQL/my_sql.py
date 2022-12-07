@@ -7,5 +7,5 @@ class LibraryModel(Model):
     author = CharField(max_length=100)
 
     class Meta:
-        db_table = "library"
-        order_by = ("id",)
+         db_table = "library"
+         order_by = ("id",)

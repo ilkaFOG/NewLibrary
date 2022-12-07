@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Book",
     "\\Library",
     "\\PDF",
+    "\\SQL",
     "\\UI"
   ],
   "SelectedNode": "\\main.py",

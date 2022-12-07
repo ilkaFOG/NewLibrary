@@ -1,9 +1,9 @@
-from ast import Index
+# from ast import Index
 import datetime
 import os
 import msvcrt
-import pyautogui as pag
-import sys
+# import pyautogui as pag
+# import sys
 
 from peewee import MySQLDatabase, InternalError as PeeweeInternalError
 from Book.book import Book
@@ -296,5 +296,5 @@ class Ui:
             self.library.close()
         except PeeweeInternalError as px:
             print(str(px))
-
+        os.system('cls')
         print("Конец программы")
