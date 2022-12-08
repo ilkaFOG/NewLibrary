@@ -201,17 +201,23 @@ class Ui:
                         author = input("Введите автора книги еще раз: ")
                     elif key == 27:
                         return
-            year = int(input("Введите год издания книги:"))
-            while year < 0 or year > int(datetime.date.today().year):
-                year = int(input("Попробуйте ввести год еще раз: "))
+            try:
+                year = int(input("Введите год издания книги:"))
+                while year < 0 or year > int(datetime.date.today().year):
+                    year = int(input("Попробуйте ввести год еще раз: "))
+            except ValueError:
+                print('Введите число! Чтобы повторить введите 1')
+                key = ord(msvcrt.getch())
+                if key == 49:
+                    self.add_book()
             book = Book(title, year, author)
             print("Хотите добавить книгу\n %s? \n 1-Да, 2-Нет" % book)
             change_option = ord(msvcrt.getch())
 
-            if change_option == 49 or 13:
+            if change_option == 49 or change_option == 13:
                 self.library.add(book=book)
                 print('Книга добавлена')
-            elif change_option == 50:
+            else:
                 print('Книга не добавлена')
 
             print ("Нажмите <Esc> для выхода")
